@@ -22,6 +22,7 @@
 				<%=((Client)(session.getAttribute("loginClient"))).getClientMail()%>님 반갑습니다.
 			</div>
 			<ul>
+				<li><a href="<%=request.getContextPath()%>/IndexController">홈으로</a></li>
 				<li><a href = "<%=request.getContextPath()%>/CartListController">장바구니</a></li>
 				<!-- ClientOneController -> ClientDao.selectclientOne() -> /view/client/clientOne.jsp-->
 				<li><a href = "<%=request.getContextPath()%>/ClientOneController">회원정보</a></li>

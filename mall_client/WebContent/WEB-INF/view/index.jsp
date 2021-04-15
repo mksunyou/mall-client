@@ -29,7 +29,11 @@
 			%>
 				<td>
 					<div><img src="<%=request.getContextPath()%>/img/default.jpg"></div>
-					<div><a href = ""><%=ebook.getEbookTitle() %></a></div>
+					<!-- EbookOneController - EbookDao.selectEbookOne() - ebookOne.jsp -->
+					<div>
+						<a href = "<%=request.getContextPath()%>/EbookOneController?ebookNo=<%=ebook.getEbookNo()%>">
+							<%=ebook.getEbookTitle() %></a>
+					</div>
 					<div>￦<%=ebook.getEbookPrice()%></div>
 				</td>
 			<%

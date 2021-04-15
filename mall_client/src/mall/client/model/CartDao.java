@@ -7,6 +7,93 @@ import mall.client.vo.*;
 
 public class CartDao {
 	private DBUtil dbUtil;
+	
+	public int deleteCart(Cart cart) {
+		int rowCnt = 0;	
+		this.dbUtil = new DBUtil();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		try {
+			conn = this.dbUtil.getConnection();
+			String sql = "DELETE FROM cart WHERE cart_no=?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, cart.getCartNo());
+			
+			//디버깅
+			System.out.println("DeleteCart stmt : "+stmt);
+			rowCnt = stmt.executeUpdate();
+		
+		} catch (Exception e){
+			e.printStackTrace();
+			
+		} finally { //try든, catch든 무조건 끝날때는 finally 실행
+			this.dbUtil.close(null, stmt, conn);
+		}
+		return rowCnt; 
+	}
+	
+	//중복확인
+	public boolean selectClientMail(Cart cart) {
+		boolean flag = true; //중복이 없음
+		this.dbUtil = new DBUtil();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		
+		try {
+			conn = this.dbUtil.getConnection();
+			String sql = "SELECT * FROM cart WHERE client_mail=? AND eoobk_no=?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, cart.getClientMail());
+			stmt.setInt(2, cart.getEbookNo());
+			
+			//디버깅
+			System.out.println("장바구니 중복 : "+stmt);
+			
+			rs = stmt.executeQuery();
+			
+			if(rs.next()) {
+				flag = false; //중복있음
+			}
+		
+		} catch (Exception e){
+			e.printStackTrace();
+			
+		} finally { //try든, catch든 무조건 끝날때는 finally 실행
+			this.dbUtil.close(rs, stmt, conn);
+		}
+		return flag;
+	}
+	
+	//장바구니 추가
+	public int insertCart(Cart cart) {
+		int rowCnt = 0;	
+		this.dbUtil = new DBUtil();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+
+		try {
+			conn = this.dbUtil.getConnection();
+			String sql = "INSERT INTO cart(client_mail, ebook_no, cart_date) VALUES(?,?,NOW())";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, cart.getClientMail());
+			stmt.setInt(2, cart.getEbookNo());
+			
+			//디버깅
+			System.out.println("insertCart stmt : "+stmt);
+			rowCnt = stmt.executeUpdate();
+		
+		} catch (Exception e){
+			e.printStackTrace();
+			
+		} finally { //try든, catch든 무조건 끝날때는 finally 실행
+			this.dbUtil.close(null, stmt, conn);
+		}
+		return rowCnt; //제발 please...
+	}
+	
+	
 	public List<Map<String, Object>> selectCartList(String clientMail) {
 		
 		//리턴할 리스트 추가 조인된 테이블을 사용하기 때문에 map 사용.
@@ -23,7 +110,7 @@ public class CartDao {
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, clientMail);
 			//디버깅
-			System.out.println("CartDaostmt : "+stmt);
+			System.out.println("selectCartList : "+stmt);
 			
 			rs = stmt.executeQuery();
 			/*

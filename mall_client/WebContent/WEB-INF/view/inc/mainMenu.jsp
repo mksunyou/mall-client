@@ -27,6 +27,7 @@
 				<!-- ClientOneController -> ClientDao.selectclientOne() -> /view/client/clientOne.jsp-->
 				<li><a href = "<%=request.getContextPath()%>/ClientOneController">회원정보</a></li>
 				<li><a href = "<%=request.getContextPath()%>/LogoutController">로그아웃</a></li>
+				<li><a href = "<%=request.getContextPath()%>/OrdersListController">주문내역</a></li>
 			</ul>
 		</div>
 <%

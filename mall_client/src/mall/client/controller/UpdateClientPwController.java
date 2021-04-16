@@ -23,7 +23,7 @@ public class UpdateClientPwController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session= request.getSession();
 		if(session.getAttribute("loginClient") == null) {
-			response.sendRedirect(request.getContextPath()+"IndexController");
+			response.sendRedirect(request.getContextPath()+"/IndexController");
 			return;
 		}
 		

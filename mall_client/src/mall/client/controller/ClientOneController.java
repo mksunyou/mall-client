@@ -22,10 +22,17 @@ public class ClientOneController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/IndexController");
 			return;
 		}
-		String clientMail = ((Client)session.getAttribute("loginClient")).getClientMail(); // 세션에서 받아온 값을 문자열타입으로 clientMail에 저장 (세션을 받아 올때 email만 받아옴)
+		// 세션에서 받아온 값을 문자열타입으로 clientMail에 저장 (세션을 받아 올때 email만 받아옴)
+		String clientMail = ((Client)session.getAttribute("loginClient")).getClientMail(); 
 		System.out.println(clientMail+"고객정보세션"); //디버깅코드
+		
+		//dao 호출
 		this.clientDao = new ClientDao();
+		
+		//보여줄 클라이언트 정보가 담겨있는 객체
 		client = this.clientDao.selectClientOne(clientMail);
+		
+		//request객체에 클라이언트 정보 저장
 		request.setAttribute("client", client);
 		request.getRequestDispatcher("/WEB-INF/view/client/clientOne.jsp").forward(request, response);
 	}

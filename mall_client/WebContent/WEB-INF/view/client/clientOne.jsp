@@ -35,6 +35,6 @@
 	<!-- UpdateClientPwController.doPost() - ClientDao.updateClientPw() - session.invalidate()(update 성공했을때) - redirect:/IndexController(로그아웃) -->
 	<a href="<%=request.getContextPath()%>/UpdateClientPwController"><button type="button">비밀번호수정</button></a>
 	<!-- DeleteClientController - CartDao.deleteCartByClient(mail), ClientDao.deleteClient() - session.invalidate()(탈퇴 후 로그아웃) - redirect:/IndexController(로그아웃) -->
-	<a href=""><button type="button">회원탈퇴</button></a>
+	<a href="<%=request.getContextPath()%>/DeleteClientController"><button type="button">회원탈퇴</button></a>
 </body>
 </html>  

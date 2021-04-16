@@ -8,6 +8,33 @@ import mall.client.vo.Client;
 public class ClientDao {//dao의 모든 메소드는 DBUtil이 필요하다.
 	private DBUtil dbUtil;
 
+	//회원탈퇴
+	public void deleteClient(String clientMail) {
+		this.dbUtil = new DBUtil();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+
+		try {
+			// sql
+			String sql = "DELETE FROM client WHERE client_mail = ?";
+			// db처리
+			conn = this.dbUtil.getConnection();
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, clientMail);
+
+			//디버깅
+			System.out.println(stmt+" <-- ClientDao에서 deleteClient()의 stmt");
+
+			//삭제 실행
+			stmt.executeUpdate();
+
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			this.dbUtil.close(null, stmt, conn);
+		}
+	}
+	
 	//비밀번호 확인
 	public boolean checkIdPw(Client client) {
 		//
@@ -169,7 +196,7 @@ public class ClientDao {//dao의 모든 메소드는 DBUtil이 필요하다.
 		ResultSet rs = null;
 		try {
 			conn = this.dbUtil.getConnection();
-			String sql = "SELECT client_mail clientMail FROM client WHERE client_mail=? AND client_pw=PASSWORD(?)";
+			String sql = "SELECT client_no clientNo, client_mail clientMail FROM client WHERE client_mail=? AND client_pw=PASSWORD(?)";
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, client.getClientMail());
 			stmt.setString(2, client.getClientPw());
@@ -177,6 +204,7 @@ public class ClientDao {//dao의 모든 메소드는 DBUtil이 필요하다.
 			rs = stmt.executeQuery();
 			if(rs.next()) {
 				returnClient = new Client();
+				returnClient.setClientNo(rs.getInt("clientNo"));
 				returnClient.setClientMail(rs.getString("clientMail"));
 			}
 		} catch(Exception e) {

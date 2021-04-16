@@ -27,13 +27,15 @@ public class DeleteCartController extends HttpServlet {
 			return;
 		}
 		
-		//CartNo 호출
-		int cartNo = Integer.parseInt(request.getParameter("cartNo"));
+		//ebookNo, clientMail 호출
+		int ebookNo = Integer.parseInt(request.getParameter("ebookNo"));
+		String clientMail =  ((Client)(session.getAttribute("loginClient"))).getClientMail();
+		
+		//dao 호출
 		this.cartDao = new CartDao();
-		Cart cart = new Cart();
-		cart.setCartNo(cartNo);
-		cart.setClientMail(((Client)session.getAttribute("loginClient")).getClientMail());
-		this.cartDao.deleteCart(cart);
+		
+		//삭제 실행
+		this.cartDao.deleteCart(clientMail, ebookNo);
 		
 		response.sendRedirect(request.getContextPath()+"/CartListController");
 		

@@ -38,7 +38,7 @@ public class InsertCartController extends HttpServlet {
 		if(this.cartDao.selectClientMail(cart)) {
 			this.cartDao.insertCart(cart);
 		} else {
-			System.out.println("카트에 중복된 ebook존재.");
+			System.out.println("장바구니에 이미 존재합니다.");
 		}
 
 		response.sendRedirect(request.getContextPath()+"/CartListController");		

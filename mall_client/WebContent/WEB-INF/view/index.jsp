@@ -18,15 +18,45 @@
 	<!-- 메뉴2 카테고리-->
 	<h1>index</h1>
 	<%
-	String searchWord = (String)(request.getAttribute("searchWord"));
-	List<Ebook> ebookList = (List<Ebook>)(request.getAttribute("ebookList")); //ebook리스트
-	int pageRange = (Integer)(request.getAttribute("pageRange"));
-	int lastPage = (Integer)(request.getAttribute("lastPage"));
-	int rowPerPage = (Integer)(request.getAttribute("rowPerPage"));
-	int currentPage = (Integer)(request.getAttribute("currentPage"));
-	List<Category> categoryList = (List<Category>)(request.getAttribute("categoryList")); //카테고리 이름들 리스트(가중치도 들어있음)
-	String categoryName = (String)(request.getAttribute("categoryName"));
+		String searchWord = (String)(request.getAttribute("searchWord"));
+		List<Ebook> ebookList = (List<Ebook>)(request.getAttribute("ebookList")); //ebook리스트
+		int pageRange = (Integer)(request.getAttribute("pageRange"));
+		int lastPage = (Integer)(request.getAttribute("lastPage"));
+		int rowPerPage = (Integer)(request.getAttribute("rowPerPage"));
+		int currentPage = (Integer)(request.getAttribute("currentPage"));
+		List<Category> categoryList = (List<Category>)(request.getAttribute("categoryList")); //카테고리 이름들 리스트(가중치도 들어있음)
+		String categoryName = (String)(request.getAttribute("categoryName"));
+		List<Map<String, Object>> bestOrdersList = (List<Map<String, Object>>)(request.getAttribute("bestOrdersList"));
 	%>
+	
+	<!-- bestseller 출력(1~5위) -->	
+	<h3>Best Seller</h3>
+	
+	<table border="1">
+		<tr>
+			<%
+				for(Map m : bestOrdersList) {
+			%>
+					<td>
+						<div><img src="<%=request.getContextPath()%>/img/default.jpg"></div>
+						<!-- EbookOneController - EbookDao.selectEbookOne() - ebookOne.jsp -->
+						<div>
+							<a href="<%=request.getContextPath()%>/EbookOneController?ebookNo=<%=m.get("ebookNo")%>">
+								<%=m.get("ebookTitle")%>
+							</a>
+						</div>
+
+						<div>￦<%=m.get("ebookPrice")%></div>
+						<div>판대 부수 : <%=m.get("cnt")%></div>
+					</td>
+			<%		
+				}
+			%>
+		</tr>
+	</table>
+	
+	
+	<!-- 카테고리별 -->
 		<ul>
 			<li><a href = "<%=request.getContextPath()%>/IndexController">전체보기</a></li>
 	<%
@@ -37,6 +67,8 @@
 		}
 	%>
 		</ul>
+	
+	<!-- 상품 출력 -->
 	<table border="1">
 		<tr>
 			<%

@@ -12,6 +12,54 @@ import mall.client.vo.Orders;
 public class OrdersDao {
 	private DBUtil dbUtil;
 	
+	//베스트 셀러
+	public List<Map<String, Object>> selectBestOrdersList() {
+
+	//리턴할 리스트 추가 조인된 테이블을 사용하기 때문에 map 사용.
+	List<Map<String, Object>> list = new ArrayList<>();
+	this.dbUtil = new DBUtil();
+	Connection conn = null;
+	PreparedStatement stmt = null;
+	ResultSet rs = null;
+	
+	try {
+		conn = this.dbUtil.getConnection();
+		String sql = "SELECT t.ebook_no ebookNo, t.cnt cnt, e.ebook_title ebookTitle, e.ebook_price ebookPrice"
+				+ " FROM"
+					+ "	(SELECT ebook_no, COUNT(ebook_no) cnt"
+					+ "	FROM orders"
+					+ "	WHERE orders_state = '주문완료'"
+					+ "	GROUP BY ebook_no"
+					+ "	HAVING COUNT(ebook_no) > 1"
+					+ "	ORDER BY COUNT(ebook_no) DESC"
+					+ "	LIMIT 5) t INNER JOIN ebook e"
+					+ " ON t.ebook_no = e.ebook_no";
+		stmt = conn.prepareStatement(sql);
+
+		//디버깅
+		System.out.println("selectBestOrdersList : "+stmt);
+		
+		rs = stmt.executeQuery();
+	
+		while(rs.next()) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("ebookNo", rs.getInt("ebookNo"));
+			map.put("cnt", rs.getString("cnt"));
+			map.put("ebookTitle", rs.getString("ebookTitle"));
+			map.put("ebookPrice", rs.getInt		("ebookPrice"));
+			list.add(map);
+	}
+	
+	} catch (Exception e){
+		e.printStackTrace();
+		
+	} finally { //try든, catch든 무조건 실행
+		this.dbUtil.close(rs, stmt, conn);
+	}
+	return list; 
+}
+
+	
 	//주문리스트
 	public List<Map<String, Object>> selectOrderListByClient(int clientNo) {
 		
@@ -29,7 +77,7 @@ public class OrdersDao {
 			stmt.setInt(1, clientNo);
 
 			//디버깅
-			System.out.println("selectOrdersList : "+stmt);
+			System.out.println("selectOrderListByClient : "+stmt);
 			
 			rs = stmt.executeQuery();
 		

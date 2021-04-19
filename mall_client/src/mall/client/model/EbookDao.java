@@ -1,16 +1,52 @@
 package mall.client.model;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import org.mariadb.jdbc.internal.com.read.dao.Results;
+import java.util.Map;
 
 import mall.client.commons.DBUtil;
 import mall.client.vo.Ebook;
 
 public class EbookDao {
 	private DBUtil dbutil;
+	
+	public List<Map<String,Object>> selectEbookListByMonth(int year, int month) {
+		List<Map<String,Object>> list = new ArrayList<>();
+		this.dbutil = new DBUtil();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+		conn = this.dbutil.getConnection();
+		String sql = "SELECT ebook_no ebookNo, ebook_title ebookTitle, DAY(ebook_date) d FROM ebook WHERE YEAR(ebook_date)=? AND MONTH(ebook_date)=? ORDER BY d asc";
+		stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, year);
+		stmt.setInt(2, month);
+		
+		//디버깅
+		System.out.println("selectEbookListByMonth : " + stmt);
+		
+		rs = stmt.executeQuery();
+		while(rs.next()) {
+			Map<String,Object> map = new HashMap<>();
+			map.put("ebookNo", rs.getInt("ebookNo"));
+			map.put("ebookTitle", rs.getString("ebookTitle"));
+			map.put("d",rs.getInt("d"));
+			list.add(map);
+		}
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		} finally { //try든, catch든 무조건 끝날때는 finally 실행
+			this.dbutil.close(rs, stmt, conn);
+		}
+		return list;
+	}
 	
 	//검색어 초기화
 	public int totalCount(String searchWord, String categoryName ) {

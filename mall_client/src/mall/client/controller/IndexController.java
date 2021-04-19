@@ -2,6 +2,7 @@ package mall.client.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import mall.client.model.CategoryDao;
 import mall.client.model.EbookDao;
+import mall.client.model.OrdersDao;
 import mall.client.vo.Category;
 import mall.client.vo.Ebook;
 
@@ -20,11 +22,16 @@ import mall.client.vo.Ebook;
 public class IndexController extends HttpServlet {	
 	private EbookDao ebookDao;
 	private CategoryDao categoryDao;
+	private OrdersDao ordersDao;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
 		//Dao 호출
+		this.ordersDao = new OrdersDao();
 		this.ebookDao = new EbookDao();
 		this.categoryDao = new CategoryDao();
+		
+		//베스트셀러 list
+		List<Map<String, Object>> bestOrdersList = this.ordersDao.selectBestOrdersList();
 		
 		// request 분석
 		int currentPage = 1;
@@ -70,6 +77,7 @@ public class IndexController extends HttpServlet {
 				}
 
 				// request객체에 리스트 저장 후 View forward
+				request.setAttribute("bestOrdersList", bestOrdersList);
 				request.setAttribute("searchWord", searchWord);
 				request.setAttribute("currentPage", currentPage);
 				request.setAttribute("rowPerPage", rowPerPage);

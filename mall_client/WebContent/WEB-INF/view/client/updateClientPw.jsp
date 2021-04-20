@@ -1,6 +1,5 @@
-<%@page import="mall.client.controller.ClientOneController"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import = "mall.client.vo.*" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,16 +7,12 @@
 <title>updateClientPw</title>
 </head>
 <body>
-<%
-	Client client = (Client)request.getAttribute("client");
-%>
-
 	<jsp:include page="/WEB-INF/view/inc/mainMenu.jsp"></jsp:include>
 	<!-- 메뉴1 -->
 	<h1>updateClientPw</h1>
 	
-	<form method = "post" action = "<%=request.getContextPath()%>/UpdateClientPwController">
-		<input type = "hidden" value = "<%=client.getClientMail()%>" name = "clientMail">
+	<form method = "post" action = "${pageContext.request.contextPath}/UpdateClientPwController">
+		<input type = "hidden" value = "${pageContext.request.contextPath}" name = "clientMail">
 		<table border="1">
 
 			<tr>
@@ -31,7 +26,7 @@
 			</tr>
 		</table>
 		<button type="submit">비밀번호 변경</button>
-		<a href="<%=request.getContextPath()%>/ClientOneController"><button type="button">취소</button></a>
+		<a href="${pageContext.request.contextPath}/ClientOneController"><button type="button">취소</button></a>
 	</form>
 	
 </body>

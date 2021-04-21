@@ -26,9 +26,6 @@ public class OrdersListController extends HttpServlet {
 			return;
 		}
 		
-		//인코딩
-		request.setCharacterEncoding("utf-8");
-		
 		//의존객체 생성 후 주입
 		this.odersDao = new OrdersDao();
 		

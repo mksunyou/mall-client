@@ -29,9 +29,6 @@ public class CartListController extends HttpServlet {
 			return;
 		}
 		
-		//인코딩
-		request.setCharacterEncoding("utf-8");
-		
 		//로그인 정보 가져오기.
 		String clientMail =  ((Client)(session.getAttribute("loginClient"))).getClientMail();
 		

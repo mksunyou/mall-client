@@ -15,6 +15,11 @@
 	<!-- 캘린더(이번달에 나온 책들)-->
 	<!-- 베스트셀러(주문량) -->
 	<!-- 메뉴2 카테고리-->
+	<div>
+		<div>오늘 접속자 수: ${statsCount}</div>
+		<div>전체 접속자 수: ${total}</div>
+	</div>
+	
 	<h1>index</h1>
 	
 	<!-- bestseller 출력(1~5위) -->	
@@ -28,7 +33,7 @@
 						<!-- EbookOneController - EbookDao.selectEbookOne() - ebookOne.jsp -->
 						<div>
 							<a href="${pageContext.request.contextPath}/EbookOneController?ebookNo=${m.ebookNo}">
-								${m.ebookTitle}%>
+								${m.ebookTitle}
 							</a>
 						</div>
 
